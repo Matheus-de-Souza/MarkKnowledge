@@ -1,0 +1,1 @@
+<?php echo 'It should not be shown.'
