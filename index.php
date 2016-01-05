@@ -19,7 +19,10 @@ $app->get('/list-files', function () {
     {
         //filter files
         if (in_array(strtolower(array_pop(explode('.', $file))), $display)) {
-            $result['files'][] = ''.$file;
+            $dir = explode ('/', $file);
+            $filename = array_pop($dir);
+            $dirname = implode($dir, '/');
+            $result['files']['/' . $dirname][] = ''.$filename;
         }
     }
 
