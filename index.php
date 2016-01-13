@@ -22,7 +22,7 @@ $app->get('/list-files', function () {
             $dir = explode ('/', $file);
             $filename = array_pop($dir);
             $dirname = implode($dir, '/');
-            $result['files']['/' . $dirname][] = ''.$filename;
+            $result['files'][$dirname][] = ''.$filename;
         }
     }
 
@@ -37,7 +37,8 @@ $app->post('/show-file-contents', function () use ($app) {
     $filename = $body->file;
    
     $result = array ();
-    $result['file-contents'] = file_get_contents($filename);
+    $result['file']['contents']         = file_get_contents(__DIR__ . '/' . $filename);
+    $result['file']['lastModifiedDate'] = date("Y-m-d H:i:s",filemtime($filename));
 
     echo json_encode($result);
 });

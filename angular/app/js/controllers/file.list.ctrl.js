@@ -2,9 +2,9 @@ angular
 	.module('app')
 	.controller('FileListCtrl', FileListCtrl);
 
-FileListCtrl.$inject = ['$http', '$log'];
+FileListCtrl.$inject = ['$http', '$filter', '$log'];
 
-function FileListCtrl ($http, $log) {
+function FileListCtrl ($http, $filter, $log) {
 
 	var vm = this;
 	vm.init            = init;
@@ -18,8 +18,6 @@ function FileListCtrl ($http, $log) {
 			method: 'GET',
 			url: '/list-files'
 		}).then(function successCallback(response) {
-			// this callback will be called asynchronously
-			// when the response is available
 
 			vm.files = response.data.files;
 
@@ -38,7 +36,14 @@ function FileListCtrl ($http, $log) {
 	};
 
 	function showFileContent (dirname, filename) {
-		$log.log("dirname: ", dirname, 'filename: ', filename);
-		vm.selectedFilePath = dirname + '/' + filename;
+
+		$http({
+			method: 'POST',
+			url: '/show-file-contents',
+			data: { file: dirname + '/' + filename }
+		}).then(function successCallback(response) {
+			$log.log('response', response.data);
+			vm.file = response.data.file;
+		});
 	}
 };
