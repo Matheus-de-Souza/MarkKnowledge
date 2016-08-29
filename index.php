@@ -1,12 +1,12 @@
 <?php
 
-require('./vendor/Slim/Slim/Slim.php');
+require(__DIR__ . '/vendor/Slim/Slim/Slim.php');
 
 \Slim\Slim::registerAutoloader();
 
 $app = new \Slim\Slim();
 
-$app->get('/list-files', function () {
+$app->get('/list-files', function () use ($app) {
         
     $it = new RecursiveDirectoryIterator("Knowledge");
     
@@ -14,14 +14,15 @@ $app->get('/list-files', function () {
 
     $result = array ();
     $result['files'] = array ();
+    $slash = DIRECTORY_SEPARATOR;
 
     foreach(new RecursiveIteratorIterator($it) as $file)
     {
         //filter files
         if (in_array(strtolower(array_pop(explode('.', $file))), $display)) {
-            $dir = explode ('/', $file);
+            $dir = explode ($slash, $file);
             $filename = array_pop($dir);
-            $dirname = implode($dir, '/');
+            $dirname = implode($dir, $slash);
             $result['files'][$dirname][] = ''.$filename;
         }
     }
@@ -35,9 +36,10 @@ $app->post('/show-file-contents', function () use ($app) {
     $body = json_decode($body);
 
     $filename = $body->file;
+    $slash = DIRECTORY_SEPARATOR;
    
     $result = array ();
-    $result['file']['contents']         = file_get_contents(__DIR__ . '/' . $filename);
+    $result['file']['contents']         = file_get_contents(__DIR__ . $slash . $filename);
     $result['file']['lastModifiedDate'] = date("Y-m-d H:i:s",filemtime($filename));
 
     echo json_encode($result);
