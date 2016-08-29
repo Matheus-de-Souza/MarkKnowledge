@@ -3,10 +3,11 @@ A web application to maintain code snippets or other important information. It u
 
 
 ## Getting Started
-
+```
    cd angular
    bower install
    cd ..
    git submodule --update --init --recursive
    cd vendor/Slim
    git checkout 2.6.2
+```
